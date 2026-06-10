@@ -1,0 +1,120 @@
+-----------------MLOPS PROJECTS---------------
+
+Using Mobaxterm to connect with the machine---Click on session---click on ssh--give public ip address in Remote Host and Username 'ubuntu'---Click on Use private key 'Select the key you generate' and click on ok. 
+
+sudo -i
+
+sudo apt update && sudo apt upgrade -y
+sudo apt install python3 python3-pip python3-venv git -y
+python3 --version
+pip3 --version
+
+
+git clone https://github.com/CloudDevOpsHub/MLOPS-Project
+cd MLOPS-Project
+
+V env of python 
+
+python3 -m venv .mlops
+source .mlops/bin/activate
+
+pip install --upgrade pip
+pip install -r requirements.txt
+
+python train.py
+
+uvicorn main:app --host 0.0.0.0 --port 8000
+
+
+install docker 
+
+1.1: Install Docker
+sudo apt update
+sudo apt install -y docker.io
+sudo systemctl start docker
+sudo systemctl enable docker
+sudo usermod -aG docker $USER
+newgrp docker
+docker -v
+
+
+curl -LO https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl
+chmod +x kubectl
+sudo mv kubectl /usr/local/bin/
+kubectl version --client
+
+
+curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
+sudo apt install -y unzip
+unzip awscliv2.zip
+sudo ./aws/install
+aws --version
+
+curl -sLO https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_Linux_amd64.tar.gz
+tar -xzf eksctl_Linux_amd64.tar.gz
+sudo mv eksctl /usr/local/bin/
+eksctl version
+
+
+docker build -t it-career-api .
+Check:
+docker images
+
+
+12.1: Login to DockerHub
+docker login
+12.2: Tag Image
+docker tag it-career-api vikas4cloud/it-career-api:latest
+12.3: Push Image
+docker push vikas4cloud/it-career-api:latest
+
+
+Go to IAM---Create a user 'eksiam'---Create a group 'admin' and give the full access control then add the user in the group.
+
+aws configure
+AWS Access Key ID:
+AWS Secret Access Key:
+Give Default region name:
+Give Default output format [None]: json
+
+
+eksctl create cluster \
+--name mlops-cluster \
+--region ap-south-1 \
+--nodegroup-name mlops-nodes \
+--node-type t3.medium \
+--nodes 2 \
+--nodes-min 2 \
+--nodes-max 3 \
+--managed 
+
+or 
+
+Create Cluster using eksctl
+eksctl create cluster \
+--name mlops-cluster \
+--region ap-south-1 \
+--nodegroup-name mlops-nodes \
+--node-type m7i-flex.large \
+--nodes 1 \
+--nodes-min 1 \
+--nodes-max 2 \
+--managed 
+
+
+kubectl apply -f k8s-deploy.yml
+kubectl get deployments
+kubectl get pods
+kubectl get svc
+
+
+Copy the External IP and Hit the EXTERNAL-IP:   http://a58c66bc0d08c405db1044b2c5db7c4a-531450028.ap-south-1.elb.amazonaws.com/docs
+
+
+
+
+then delete and verify 
+eksctl delete cluster --name mlops-cluster --region ap-south-1
+https://ap-south-1.console.aws.amazon.com/eks/clusters?region=ap-south-1
+https://ap-south-1.console.aws.amazon.com/cloudformation/home?region=ap-south-1#/stacks?filteringText=&filteringStatus=active&viewNested=true
+
